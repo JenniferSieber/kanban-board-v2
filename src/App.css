@@ -1,0 +1,21 @@
+
+
+html, 
+body,
+#root {
+  box-sizing: border-box;
+  background: black;
+  color: white;
+}
+
+.mainBGColor {
+  background-color: #0D1117;
+}
+
+.borderColor {
+  border: #161C22;
+}
+
+.columnBGColor {
+  background: #161C22;
+}
