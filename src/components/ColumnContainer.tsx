@@ -9,29 +9,45 @@ interface Props {
 }
 
 function ColumnContainer({ column, deleteColumn }: Props) {
+  const {
+    setNodeRef,
+    attributes,
+    listeners,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
+    id: column.id,
+    data: {
+      type: "Column",
+      column,
+    },
+  });
 
-  const { setNodeRef, attributes, listeners,transform, transition } = 
-    useSortable({
-      id: column.id,
-      data: {
-        type: "Column",
-        column,
-      }
-    })
+  // Style for transform and transition
+  const style = {
+    transition,
+    transform: CSS.Transform.toString(transform),
+  };
 
-    // Style for transform and transition
-    const style = {
-      transition,
-      transform: CSS.Transform.toString(transform),
-    }
+  if (isDragging) {
+    // render empty frame of location during isDragging
+    return (
+      <div
+        ref={setNodeRef}
+        style={style}
+        className="flex flex-col rounded-md columnBGColor opacity-50 border-2 border-rose-700 w-[350px] h-[500px] max-h-[500px] gap-4"
+      ></div>
+    );
+  }
   return (
-    <div 
+    <div
       ref={setNodeRef}
       style={style}
       className="flex flex-col rounded-md columnBGColor w-[350px] h-[500px] max-h-[500px] gap-4"
     >
       {/* Column Title Container */}
-      <header 
+      <header
         {...attributes}
         {...listeners}
         className=" flex justify-between items-center rounded-lg rounded-b-none bg-[#0D1117] p-3 font-bold text-md h-[60px] cursor-grab border-[#161C22] border-4"
