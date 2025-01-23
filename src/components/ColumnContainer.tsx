@@ -1,31 +1,37 @@
-import { Column } from "../types";
+import TrashIcon from "../icons/TrashIcon";
+import { Column, Id } from "../types";
 
 interface Props {
   column: Column;
+  deleteColumn: (id: Id) => void;
 }
 
-function ColumnContainer({ column }: Props) {
-  // const { column } = Props; destructure was not working adjustd the Props pass
+function ColumnContainer({ column, deleteColumn }: Props) {
   return (
-    // <div className="columnBGColor w-1/4 h-auto max-h-screen flex gap-4">
-    //     {column.title}
-    // </div>
-
-    // <div className="columnBGColor w-82 h-96 max-h-96 flex gap-4">
-    
-    <div className="flex flex-col rounded-md columnBGColor w-[350px] h-[500px] max-h-[500px] flex gap-4">
-        {/* Column Title Container */}
-        <header className="rounded-lg rounded-b-none bg-[#0D1117] p-3 font-bold text-md h-[60px] cursor-grab border-[#161C22] border-4">
-            {column.title}
-        </header>
-        <section className="flex flex-grow">
-            {/* Column Task Container */}
-            tasks details
-        </section>
-        <footer className="footer">
-            {/* Column Footer Container */}
-            footer details
-        </footer>
+    <div className="flex flex-col rounded-md columnBGColor w-[350px] h-[500px] max-h-[500px] gap-4">
+      {/* Column Title Container */}
+      <header className=" flex justify-between items-center rounded-lg rounded-b-none bg-[#0D1117] p-3 font-bold text-md h-[60px] cursor-grab border-[#161C22] border-4">
+        <div className="flex  gap-4">
+          <span className="columnBGColor flex justify-center items-center px-2 py-1 text-sm rounded-md">
+            20
+          </span>
+          <span className="text-md capitalize p-2">{column.title}</span>
+        </div>
+        <button
+          className="delete cursor-pointer p-2 rounded-full text-gray-500 hover:text-rose-500 hover:bg-[#161C22]"
+          onClick={() => deleteColumn(column.id)}
+        >
+          <TrashIcon />
+        </button>
+      </header>
+      <section className="flex flex-grow">
+        {/* Column Task Container */}
+        tasks details
+      </section>
+      <footer className="footer">
+        {/* Column Footer Container */}
+        footer details
+      </footer>
     </div>
   );
 }
