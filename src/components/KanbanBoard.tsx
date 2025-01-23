@@ -1,6 +1,7 @@
 import { Column } from "../types"; 
 import { useEffect, useState } from "react";
 import PlusIcon from "../icons/PlusIcon";
+import ColumnContainer from "./ColumnContainer";
 
 function KanbanBoard() {
   const [columns, setColumns] = useState<Column[]>([]);
@@ -24,12 +25,18 @@ function KanbanBoard() {
   }, [columns])
   return (
     <div className="flex m-auto min-h-screen items-center overflow-x-auto overflow-y-hidden px-[40px]">
-      <div className="columndisplay">
-        {columns.map((col) => <div key={col.id}>{col.title}</div> )}
+      <div className="flex gap-4">
+        
+        {
+          columns.map((col) => (
+          <ColumnContainer key={col.id} column={col} />
+          ))
+        }
       </div>
+      
       <div className="m-auto">
         <button
-          className="flex justify-center gap-3 h-[60px] w-[350px] m-w-[350px] p-4 border-2 rounded-lg cursor-pointer mainBGColor borderColor ring-rose-500 hover:ring-2"
+          className="flex justify-center gap-3 h-[60px] w-[350px] m-w-[350px] p-4 border-2 rounded-lg cursor-pointer mainBGColor  border-[#161C22] ring-rose-500 hover:ring-2"
           onClick={() => createNewColumn()}
         >
           <PlusIcon /> Add Column

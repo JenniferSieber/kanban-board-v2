@@ -13,7 +13,7 @@ body,
 }
 
 .borderColor {
-  border: #161C22;
+  border: #161C22 solid 1px;
 }
 
 .columnBGColor {
