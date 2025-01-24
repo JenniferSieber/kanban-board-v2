@@ -13,15 +13,14 @@ import {
 } from "@dnd-kit/core";
 import { SortableContext, arrayMove } from "@dnd-kit/sortable";
 import { createPortal } from "react-dom";
-// ts 39 tasks
 
 function KanbanBoard() {
   const [columns, setColumns] = useState<Column[]>([]);
   const [activeColumn, setActiveColumn] = useState<Column | null>(null);
   const [tasks, setTasks] = useState<Task[]>([]);
-  const columnsId = useMemo(() => columns.map((col) => col.id), [columns]);
 
-  // sensors for delete column container vs drag column container
+  const columnsId = useMemo(() => columns.map((col) => col.id), [columns]);
+  // sensors to identify different actions -delete drag on header
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
@@ -33,15 +32,17 @@ function KanbanBoard() {
   function generateId() {
     const randomNumber = Math.floor(Math.random() * 10001);
     return randomNumber;
-  }
+  };
 
+  // Column Functionality
   function createNewColumn() {
+    const randomId = generateId();
     const columnToAdd: Column = {
-      id: generateId(),
+      id: randomId,
       title: `column ${columns.length + 1}`,
     };
     setColumns([...columns, columnToAdd]);
-  }
+  };
 
   function deleteColumn(id: Id) {
     const filteredColumns = columns.filter((col) => col.id !== id);
@@ -57,26 +58,17 @@ function KanbanBoard() {
     setColumns(newColumns);
   };
 
-  function createTask(columnId: Id) {
-    const newTask: Task = {
-      id: generateId(),
-      columnId,
-      content: `Task ${tasks.length + 1}`
-    }
-    setTasks([...tasks, newTask]);
-  };
-
   function onDragStart(event: DragStartEvent) {
     if (event.active.data.current?.type === "Column") {
       setActiveColumn(event.active.data.current.column);
       return;
-    }
+    };
   };
 
   function onDragEnd(event: DragEndEvent) {
     const { active, over } = event;
 
-    if (!over) return; // not dragging over a valid element
+    if (!over) return; // drag not over valid element
 
     const activeColumnId = active.id;
     const overColumnId = over.id;
@@ -94,7 +86,31 @@ function KanbanBoard() {
     setColumns(swappedColumns);
   };
 
+  // Task Functionality
+  function createTask(columnId: Id) {
+    const randomId = generateId();
+    const newTask: Task = {
+      id: randomId,
+      columnId,
+      // content: `Task ${tasks.length + 1}`
+      content: `Task Id: ${randomId}`,
+    };
+    setTasks([...tasks, newTask]);
+  };
 
+  function deleteTask(id: Id) {
+    const updatedTasks = tasks.filter((task) => task.id !== id);
+    setTasks(updatedTasks);
+  };
+
+  function updateTask(id: Id, content: string) {
+    const newTasks = tasks.map(task => {
+      if (task.id !== id) return task
+      const updatedTask = { ...task, content }
+      return updatedTask
+    })
+    setTasks(newTasks);
+  };
 
   return (
     <div className="m-auto flex min-h-screen w-full items-center overflow-x-auto overflow-y-hidden px-[40px]">
@@ -113,7 +129,9 @@ function KanbanBoard() {
                   deleteColumn={deleteColumn}
                   updateColumn={updateColumn}
                   createTask={createTask}
-                  tasks={tasks.filter(task => task.columnId === col.id)}
+                  deleteTask={deleteTask}
+                  updateTask={updateTask}
+                  tasks={tasks.filter((task) => task.columnId === col.id)}
                 />
               ))}
             </SortableContext>
@@ -135,7 +153,11 @@ function KanbanBoard() {
                 deleteColumn={deleteColumn}
                 updateColumn={updateColumn}
                 createTask={createTask}
-                tasks={tasks.filter(task => task.columnId === activeColumn.id)}
+                deleteTask={deleteTask}
+                updateTask={updateTask}
+                tasks={tasks.filter(
+                  (task) => task.columnId === activeColumn.id
+                )}
               />
             )}
           </DragOverlay>,

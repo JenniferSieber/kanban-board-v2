@@ -13,11 +13,18 @@ body,
   height: 8px;
 }
 ::-webkit-scrollbar-thumb {
+  /* bg-rose-900 */
   background: #881337;
-  /* background: var(--rose-900); */
+   /* rounded-xl */
   border-radius: var(--radius-xl); 
 }
-
+.task ::-webkit-scrollbar-thumb {
+  /* bg-sky-500 */
+  background: #0EA5E9;
+  /* rounded-xl */
+  border-radius: var(--radius-xl); 
+  outline: none;
+}
 
 /* ::-webkit-scrollbar-thumb {
   @apply background: bg-rose-900rounded-xl;

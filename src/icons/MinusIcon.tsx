@@ -7,7 +7,6 @@ function MinusIcon() {
       strokeWidth={1.5}
       stroke="currentColor"
       className="size-6"
-      // className="size-6 hover:bg-rose-500 rounded-full items-center"
     >
       <path
         strokeLinecap="round"

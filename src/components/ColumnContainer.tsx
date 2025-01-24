@@ -4,17 +4,27 @@ import TrashIcon from "../icons/TrashIcon";
 import PlusDocIcon from "../icons/PlusDocIcon";
 import { Column, Id, Task } from "../types";
 import { CSS } from "@dnd-kit/utilities";
+import TaskCard from "./TaskCard";
 
 interface ColumnContainerProps {
   column: Column;
   deleteColumn: (id: Id) => void;
   updateColumn: (id: Id, title: string) => void;
   createTask: (columnId: Id) => void;
+  deleteTask: (id: Id) => void;
+  updateTask: (id: Id, content: string) => void;
   tasks: Task[];
-  task: Task;
 }
 
-function ColumnContainer({ column, deleteColumn, updateColumn, createTask, tasks }: ColumnContainerProps) {
+function ColumnContainer({
+  column,
+  deleteColumn,
+  updateColumn,
+  createTask,
+  deleteTask,
+  updateTask,
+  tasks,
+}: ColumnContainerProps) {
   const [editMode, setEditMode] = useState(false);
   const {
     setNodeRef,
@@ -31,17 +41,14 @@ function ColumnContainer({ column, deleteColumn, updateColumn, createTask, tasks
     },
     disabled: editMode,
   });
-  
-  
 
-  // Style for transform and transition
   const style = {
     transition,
     transform: CSS.Transform.toString(transform),
   };
 
   if (isDragging) {
-    // render empty frame of location during isDragging
+    // Render empty frame at original location on isDragging
     return (
       <div
         ref={setNodeRef}
@@ -62,51 +69,58 @@ function ColumnContainer({ column, deleteColumn, updateColumn, createTask, tasks
         {...attributes}
         {...listeners}
         onClick={() => setEditMode(true)}
-        className=" flex justify-between items-center rounded-lg rounded-b-none bg-[#0D1117] p-3 font-bold text-md h-[60px] cursor-grab border-[#161C22] border-4"
+        className="flex justify-between items-center rounded-lg rounded-b-none bg-[#0D1117] p-3 font-bold text-md h-[60px] cursor-grab border-[#161C22] border-4"
       >
         <div className="flex  gap-4">
           <span className="bg-[#161C22] flex justify-center items-center px-2 py-1 text-sm rounded-md">
             20
           </span>
-          {!editMode && <span className="text-md capitalize p-2">{column.title}</span>}
+          {!editMode && (
+            <span className="text-md capitalize p-2">{column.title}</span>
+          )}
           {editMode && (
             <input
               className="bg-black rounded-sm px-2 border-2 focus:border-rose-700 outline-none"
               value={column.title}
               onChange={(e) => updateColumn(column.id, e.target.value)}
-              autoFocus 
+              autoFocus
               onBlur={() => setEditMode(false)}
               onKeyDown={(e) => {
-                if (e.key !== "Enter") return
-                setEditMode(false)
+                if (e.key !== "Enter") return;
+                setEditMode(false);
               }}
             />
           )}
         </div>
         <button
-          className="delete cursor-pointer p-2 rounded-full text-gray-500 hover:text-rose-500 hover:bg-[#161C22]"
+          className="cursor-pointer p-2 rounded-full text-gray-500 hover:text-rose-500 hover:bg-[#161C22]"
           onClick={() => deleteColumn(column.id)}
         >
           <TrashIcon />
         </button>
       </header>
+
+      {/* Column Task Container */}
       <section className="flex flex-col flex-grow gap-4 p-2 overflow-x-hidden overflow-y-auto">
-        {/* Column Task Container */}
-        {tasks.map(task => (
-          <div 
-            className="task" 
-            key={task.id}
-          >
-            {task.content}
-          </div>
+        {tasks.map((task) => (
+          <TaskCard 
+            key={task.id} 
+            task={task} 
+            deleteTask={deleteTask} 
+            updateTask={updateTask} 
+          />
         ))}
       </section>
+
       {/* Column Footer Container */}
-      <button 
+      <button
         className="flex justify-end gap-2 rounded-md items-center border-2 border-[#161C22]  py-4 hover:bg-[#0D1117] p-4 m-1 hover:text-rose-500 active:bg-black"
-        onClick={() => createTask(column.id)}
+        onClick={() => {
+          createTask(column.id);
+        }}
       >
-        <PlusDocIcon />Add Task
+        <PlusDocIcon />
+        Add Task
       </button>
     </div>
   );
