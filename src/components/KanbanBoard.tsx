@@ -2,6 +2,7 @@ import { Column, Id, Task } from "../types";
 import { useState, useMemo } from "react";
 import PlusIcon from "../icons/PlusIcon";
 import ColumnContainer from "./ColumnContainer";
+import TaskCard from "./TaskCard";
 import {
   DndContext,
   DragOverlay,
@@ -17,6 +18,7 @@ import { createPortal } from "react-dom";
 function KanbanBoard() {
   const [columns, setColumns] = useState<Column[]>([]);
   const [activeColumn, setActiveColumn] = useState<Column | null>(null);
+  const [activeTask, setActiveTask] = useState<Task | null>(null);
   const [tasks, setTasks] = useState<Task[]>([]);
 
   const columnsId = useMemo(() => columns.map((col) => col.id), [columns]);
@@ -32,7 +34,7 @@ function KanbanBoard() {
   function generateId() {
     const randomNumber = Math.floor(Math.random() * 10001);
     return randomNumber;
-  };
+  }
 
   // Column Functionality
   function createNewColumn() {
@@ -42,12 +44,12 @@ function KanbanBoard() {
       title: `column ${columns.length + 1}`,
     };
     setColumns([...columns, columnToAdd]);
-  };
+  }
 
   function deleteColumn(id: Id) {
     const filteredColumns = columns.filter((col) => col.id !== id);
     setColumns(filteredColumns);
-  };
+  }
 
   function updateColumn(id: Id, title: string) {
     console.log(id, title);
@@ -56,14 +58,18 @@ function KanbanBoard() {
       return { ...col, title };
     });
     setColumns(newColumns);
-  };
+  }
 
   function onDragStart(event: DragStartEvent) {
     if (event.active.data.current?.type === "Column") {
       setActiveColumn(event.active.data.current.column);
       return;
-    };
-  };
+    }
+    if (event.active.data.current?.type === "Task") {
+      setActiveTask(event.active.data.current.task);
+      return;
+    }
+  }
 
   function onDragEnd(event: DragEndEvent) {
     const { active, over } = event;
@@ -84,7 +90,7 @@ function KanbanBoard() {
       return arrayMove(columns, activeColumnIndex, overColumnIndex);
     };
     setColumns(swappedColumns);
-  };
+  }
 
   // Task Functionality
   function createTask(columnId: Id) {
@@ -96,21 +102,21 @@ function KanbanBoard() {
       content: `Task Id: ${randomId}`,
     };
     setTasks([...tasks, newTask]);
-  };
+  }
 
   function deleteTask(id: Id) {
     const updatedTasks = tasks.filter((task) => task.id !== id);
     setTasks(updatedTasks);
-  };
+  }
 
   function updateTask(id: Id, content: string) {
-    const newTasks = tasks.map(task => {
-      if (task.id !== id) return task
-      const updatedTask = { ...task, content }
-      return updatedTask
-    })
+    const newTasks = tasks.map((task) => {
+      if (task.id !== id) return task;
+      const updatedTask = { ...task, content };
+      return updatedTask;
+    });
     setTasks(newTasks);
-  };
+  }
 
   return (
     <div className="m-auto flex min-h-screen w-full items-center overflow-x-auto overflow-y-hidden px-[40px]">
@@ -158,6 +164,14 @@ function KanbanBoard() {
                 tasks={tasks.filter(
                   (task) => task.columnId === activeColumn.id
                 )}
+              />
+            )}
+            {activeTask && (
+              <TaskCard 
+                key={activeTask.id}
+                task={activeTask} 
+                deleteTask={deleteTask} 
+                updateTask={updateTask} 
               />
             )}
           </DragOverlay>,

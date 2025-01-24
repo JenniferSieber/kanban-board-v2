@@ -1,10 +1,11 @@
-import { useState } from "react";
-import { useSortable } from "@dnd-kit/sortable";
+import { useMemo, useState } from "react";
+import { Column, Id, Task } from "../types";
+import TaskCard from "./TaskCard";
 import TrashIcon from "../icons/TrashIcon";
 import PlusDocIcon from "../icons/PlusDocIcon";
-import { Column, Id, Task } from "../types";
+import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import TaskCard from "./TaskCard";
+import { SortableContext } from "@dnd-kit/sortable";
 
 interface ColumnContainerProps {
   column: Column;
@@ -26,6 +27,12 @@ function ColumnContainer({
   tasks,
 }: ColumnContainerProps) {
   const [editMode, setEditMode] = useState(false);
+
+  // Draggable Logic
+  const tasksIds = useMemo(() => {
+    return tasks.map(task => task.id)
+  }, [tasks]);
+
   const {
     setNodeRef,
     attributes,
@@ -103,13 +110,18 @@ function ColumnContainer({
       {/* Column Task Container */}
       <section className="flex flex-col flex-grow gap-4 p-2 overflow-x-hidden overflow-y-auto">
         {tasks.map((task) => (
-          <TaskCard 
-            key={task.id} 
-            task={task} 
-            deleteTask={deleteTask} 
-            updateTask={updateTask} 
-          />
+          <SortableContext
+            items={tasksIds}
+          >
+            <TaskCard 
+              key={task.id} 
+              task={task} 
+              deleteTask={deleteTask} 
+              updateTask={updateTask} 
+            />
+          </SortableContext>
         ))}
+        
       </section>
 
       {/* Column Footer Container */}
