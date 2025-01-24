@@ -30,7 +30,7 @@ function ColumnContainer({
 
   // Draggable Logic for a Task
   const tasksIds = useMemo(() => {
-    return tasks.map(task => task.id)
+    return tasks.map((task) => task.id);
   }, [tasks]);
 
   const {
@@ -110,19 +110,15 @@ function ColumnContainer({
       {/* Column Task Container */}
       <section className="flex flex-col flex-grow gap-4 p-2 overflow-x-hidden overflow-y-auto">
         {tasks.map((task) => (
-
-          <SortableContext
-            items={tasksIds}
-          >
-            <TaskCard 
-              key={task.id} 
-              task={task} 
-              deleteTask={deleteTask} 
-              updateTask={updateTask} 
+          <SortableContext items={tasksIds}>
+            <TaskCard
+              key={task.id}
+              task={task}
+              deleteTask={deleteTask}
+              updateTask={updateTask}
             />
           </SortableContext>
         ))}
-        
       </section>
 
       {/* Column Footer Container */}

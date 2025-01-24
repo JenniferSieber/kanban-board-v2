@@ -1,7 +1,7 @@
 export const lowPriorityIcon = (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      className="h-6 w-6 text-blue-900"
+      className="h-6 w-6 text-sky-500"
       fill="none"
       viewBox="0 0 24 24"
       stroke="currentColor"
@@ -18,7 +18,7 @@ export const lowPriorityIcon = (
   export const mediumPriorityIcon = (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      className="h-6 w-6 text-blue-300"
+      className="h-6 w-6 text-orange-500"
       fill="none"
       viewBox="0 0 24 24"
       stroke="currentColor"
@@ -41,7 +41,7 @@ export const lowPriorityIcon = (
   export const highPriorityIcon = (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      className="h-6 w-6 text-red-500"
+      className="h-6 w-6 text-rose-500"
       fill="none"
       viewBox="0 0 24 24"
       stroke="currentColor"

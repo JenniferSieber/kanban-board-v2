@@ -63,7 +63,7 @@ function TaskCard({ task, deleteTask, updateTask }: Props) {
       >
         {/* placeholder overlay */}
       </div>
-    )
+    );
   }
 
   // return Text area if editing task

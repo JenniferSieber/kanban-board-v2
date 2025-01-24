@@ -22,10 +22,10 @@ function KanbanBoard() {
   const [activeTask, setActiveTask] = useState<Task | null>(null);
   const [tasks, setTasks] = useState<Task[]>([]);
 
-  const generateId = () => Math.floor(Math.random() * 10001)
+  const generateId = () => Math.floor(Math.random() * 10001);
   const columnsId = useMemo(() => columns.map((col) => col.id), [columns]);
 
-  // Dragging logic: sensors to identify different actions 
+  // Dragging logic: sensors to identify different actions
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
@@ -39,7 +39,9 @@ function KanbanBoard() {
     const randomId = generateId();
     const columnToAdd: Column = {
       id: randomId,
-      title: `column ${columns.length + 1}`,
+      // title: `column ${columns.length + 1}`,
+      // title: `column ${randomId}`,
+      title: "Column Title",
     };
     setColumns([...columns, columnToAdd]);
   }
@@ -47,6 +49,9 @@ function KanbanBoard() {
   function deleteColumn(id: Id) {
     const filteredColumns = columns.filter((col) => col.id !== id);
     setColumns(filteredColumns);
+
+    const newTasks = tasks.filter(t => t.columnId !== id);
+    setTasks(newTasks);
   }
 
   function updateColumn(id: Id, title: string) {
@@ -88,7 +93,7 @@ function KanbanBoard() {
       return arrayMove(columns, activeColumnIndex, overColumnIndex);
     };
     setColumns(swappedColumns);
-  };
+  }
 
   function onDragOver(event: DragOverEvent) {
     const { active, over } = event;
@@ -98,28 +103,28 @@ function KanbanBoard() {
     if (activeTaskId === overTaskId) return; // same task
     const isActiveTask = active.data.current?.type === "Task";
     const isOverATask = over.data.current?.type === "Task";
-    if(!isActiveTask) return;
+    if (!isActiveTask) return;
 
     // Dropping Task over another Task - swap tasks
     if (isActiveTask && isOverATask) {
-      setTasks(tasks => {
-        const activeIndex = tasks.findIndex(t => t.id === activeTaskId);
-        const overIndex = tasks.findIndex(t => t.id === overTaskId);
+      setTasks((tasks) => {
+        const activeIndex = tasks.findIndex((t) => t.id === activeTaskId);
+        const overIndex = tasks.findIndex((t) => t.id === overTaskId);
         tasks[activeIndex].columnId = tasks[overIndex].columnId;
         return arrayMove(tasks, activeIndex, overIndex);
       });
-    };
+    }
 
     // Dropping Task over a Column empty space not on task
     const isOverAColumn = over.data.current?.type === "Column";
     if (isActiveTask && isOverAColumn) {
-      setTasks(tasks => {
-        const activeIndex = tasks.findIndex(t => t.id === activeTaskId);
+      setTasks((tasks) => {
+        const activeIndex = tasks.findIndex((t) => t.id === activeTaskId);
         tasks[activeIndex].columnId = overTaskId;
         return arrayMove(tasks, activeIndex, activeIndex);
       });
-    };
-  };
+    }
+  }
 
   // Task Functionality
   function createTask(columnId: Id) {
@@ -128,7 +133,8 @@ function KanbanBoard() {
       id: randomId,
       columnId,
       // content: `Task ${tasks.length + 1}`
-      content: `Task Id: ${randomId}`,
+      // content: `Task Id: ${randomId}`,
+      content: "Task Content",
     };
     setTasks([...tasks, newTask]);
   }
@@ -197,11 +203,11 @@ function KanbanBoard() {
               />
             )}
             {activeTask && (
-              <TaskCard 
+              <TaskCard
                 key={activeTask.id}
-                task={activeTask} 
-                deleteTask={deleteTask} 
-                updateTask={updateTask} 
+                task={activeTask}
+                deleteTask={deleteTask}
+                updateTask={updateTask}
               />
             )}
           </DragOverlay>,
