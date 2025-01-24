@@ -5,16 +5,16 @@ import PlusDocIcon from "../icons/PlusDocIcon";
 import { Column, Id, Task } from "../types";
 import { CSS } from "@dnd-kit/utilities";
 
-interface Props {
+interface ColumnContainerProps {
   column: Column;
-  task: Task;
   deleteColumn: (id: Id) => void;
   updateColumn: (id: Id, title: string) => void;
   createTask: (columnId: Id) => void;
   tasks: Task[];
+  task: Task;
 }
 
-function ColumnContainer({ column, deleteColumn, updateColumn, createTask, tasks }: Props) {
+function ColumnContainer({ column, deleteColumn, updateColumn, createTask, tasks }: ColumnContainerProps) {
   const [editMode, setEditMode] = useState(false);
   const {
     setNodeRef,
@@ -90,10 +90,15 @@ function ColumnContainer({ column, deleteColumn, updateColumn, createTask, tasks
           <TrashIcon />
         </button>
       </header>
-      <section className="flex flex-grow">
+      <section className="flex flex-col flex-grow gap-4 p-2 overflow-x-hidden overflow-y-auto">
         {/* Column Task Container */}
         {tasks.map(task => (
-          <div className="task" key={task.id}>{task.content}</div>
+          <div 
+            className="task" 
+            key={task.id}
+          >
+            {task.content}
+          </div>
         ))}
       </section>
       {/* Column Footer Container */}

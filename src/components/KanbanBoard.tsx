@@ -135,6 +135,7 @@ function KanbanBoard() {
                 deleteColumn={deleteColumn}
                 updateColumn={updateColumn}
                 createTask={createTask}
+                tasks={tasks.filter(task => task.columnId === activeColumn.id)}
               />
             )}
           </DragOverlay>,
