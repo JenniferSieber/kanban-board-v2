@@ -1,16 +1,20 @@
 import { useState } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import TrashIcon from "../icons/TrashIcon";
-import { Column, Id } from "../types";
+import PlusDocIcon from "../icons/PlusDocIcon";
+import { Column, Id, Task } from "../types";
 import { CSS } from "@dnd-kit/utilities";
 
 interface Props {
   column: Column;
+  task: Task;
   deleteColumn: (id: Id) => void;
   updateColumn: (id: Id, title: string) => void;
+  createTask: (columnId: Id) => void;
+  tasks: Task[];
 }
 
-function ColumnContainer({ column, deleteColumn, updateColumn }: Props) {
+function ColumnContainer({ column, deleteColumn, updateColumn, createTask, tasks }: Props) {
   const [editMode, setEditMode] = useState(false);
   const {
     setNodeRef,
@@ -25,6 +29,7 @@ function ColumnContainer({ column, deleteColumn, updateColumn }: Props) {
       type: "Column",
       column,
     },
+    disabled: editMode,
   });
   
   
@@ -41,7 +46,7 @@ function ColumnContainer({ column, deleteColumn, updateColumn }: Props) {
       <div
         ref={setNodeRef}
         style={style}
-        className="flex flex-col rounded-md columnBGColor opacity-50 border-2 border-rose-700 w-[350px] h-[500px] max-h-[500px] gap-4"
+        className="flex flex-col rounded-md bg-[#161C22] opacity-50 border-2 border-rose-700 w-[350px] h-[500px] max-h-[500px] gap-4"
       ></div>
     );
   }
@@ -50,7 +55,7 @@ function ColumnContainer({ column, deleteColumn, updateColumn }: Props) {
     <div
       ref={setNodeRef}
       style={style}
-      className="flex flex-col rounded-md columnBGColor w-[350px] h-[500px] max-h-[500px] gap-4"
+      className="flex flex-col rounded-md bg-[#161C22] w-[350px] h-[500px] max-h-[500px] gap-4"
     >
       {/* Column Title Container */}
       <header
@@ -60,7 +65,7 @@ function ColumnContainer({ column, deleteColumn, updateColumn }: Props) {
         className=" flex justify-between items-center rounded-lg rounded-b-none bg-[#0D1117] p-3 font-bold text-md h-[60px] cursor-grab border-[#161C22] border-4"
       >
         <div className="flex  gap-4">
-          <span className="columnBGColor flex justify-center items-center px-2 py-1 text-sm rounded-md">
+          <span className="bg-[#161C22] flex justify-center items-center px-2 py-1 text-sm rounded-md">
             20
           </span>
           {!editMode && <span className="text-md capitalize p-2">{column.title}</span>}
@@ -87,12 +92,17 @@ function ColumnContainer({ column, deleteColumn, updateColumn }: Props) {
       </header>
       <section className="flex flex-grow">
         {/* Column Task Container */}
-        tasks details
+        {tasks.map(task => (
+          <div className="task" key={task.id}>{task.content}</div>
+        ))}
       </section>
-      <footer className="footer">
-        {/* Column Footer Container */}
-        footer details
-      </footer>
+      {/* Column Footer Container */}
+      <button 
+        className="flex justify-end gap-2 rounded-md items-center border-2 border-[#161C22]  py-4 hover:bg-[#0D1117] p-4 m-1 hover:text-rose-500 active:bg-black"
+        onClick={() => createTask(column.id)}
+      >
+        <PlusDocIcon />Add Task
+      </button>
     </div>
   );
 }

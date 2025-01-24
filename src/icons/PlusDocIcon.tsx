@@ -1,4 +1,4 @@
-function PlustDocIcon() {
+function PlusDocIcon() {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -17,4 +17,4 @@ function PlustDocIcon() {
   );
 }
 
-export default PlustDocIcon;
+export default PlusDocIcon;
