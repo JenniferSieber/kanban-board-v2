@@ -15,8 +15,6 @@ function TaskCard({ task, deleteTask, updateTask }: Props) {
   const [mouseIsOver, setMouseIsOver] = useState(false);
   const [editMode, setEditMode] = useState(false);
 
-
-  // const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
   // Draggable Logic
   const {
     setNodeRef,
@@ -54,7 +52,8 @@ function TaskCard({ task, deleteTask, updateTask }: Props) {
     setMouseIsOver(false);
   };
 
-
+  // Render Modes:
+  // return frame div if Dragging
   if (isDragging) {
     return (
       <div
@@ -64,11 +63,10 @@ function TaskCard({ task, deleteTask, updateTask }: Props) {
       >
         {/* placeholder overlay */}
       </div>
-
     )
   }
 
-  // return alternate view if editMode = true
+  // return Text area if editing task
   if (editMode) {
     return (
       <div
@@ -96,6 +94,7 @@ function TaskCard({ task, deleteTask, updateTask }: Props) {
     );
   }
 
+  // return normal task card view
   return (
     <div
       ref={setNodeRef}
@@ -112,7 +111,6 @@ function TaskCard({ task, deleteTask, updateTask }: Props) {
       </p>
       {mouseIsOver && (
         <button
-          // className="absolute right-4 top-1/2-translate-y-1/2 cursor-pointer p-2 rounded-full text-gray-500 hover:text-rose-500 hover:bg-[#161C22] opacity-60 hover:opacity-100"
           className="absolute right-4 top-1/2-translate-y-1/2 cursor-pointer p-2 rounded-full text-gray-500 hover:text-rose-500"
           onClick={() => deleteTask(task.id)}
         >

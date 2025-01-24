@@ -28,7 +28,7 @@ function ColumnContainer({
 }: ColumnContainerProps) {
   const [editMode, setEditMode] = useState(false);
 
-  // Draggable Logic
+  // Draggable Logic for a Task
   const tasksIds = useMemo(() => {
     return tasks.map(task => task.id)
   }, [tasks]);
@@ -54,8 +54,8 @@ function ColumnContainer({
     transform: CSS.Transform.toString(transform),
   };
 
+  // Render overlay empty frame for task
   if (isDragging) {
-    // Render empty frame at original location on isDragging
     return (
       <div
         ref={setNodeRef}
@@ -110,6 +110,7 @@ function ColumnContainer({
       {/* Column Task Container */}
       <section className="flex flex-col flex-grow gap-4 p-2 overflow-x-hidden overflow-y-auto">
         {tasks.map((task) => (
+
           <SortableContext
             items={tasksIds}
           >
