@@ -38,7 +38,7 @@ function KanbanBoard() {
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
-        distance: 10, // starts at 10px
+        distance: 5, // starts at 5px
       },
     })
   );
@@ -176,10 +176,10 @@ function KanbanBoard() {
           />
         </div>
         <button
-          className="flex justify-center gap-3 h-[60px] w-[350px] m-w-[350px] p-4 border-2 rounded-lg cursor-pointer bg-[#0D1117]  border-[#161C22] ring-rose-500 hover:ring-2"
+          className="flex justify-center gap-3 h-[60px] w-[350px] m-w-[350px] p-4 border-2 rounded-lg cursor-pointer bg-[#0D1117]  border-[#161C22] hover:text-rose-500 hover:bg-black"
           onClick={() => createNewColumn()}
         >
-          <PlusIcon /> Add Column
+          <PlusIcon /> Add Task Column
         </button>
       </div>
 

@@ -70,21 +70,16 @@ function ColumnContainer({
     <div
       ref={setNodeRef}
       style={style}
-      className="flex flex-col rounded-md bg-[#161C22] w-[300px] max-w-[350px] h-[500px] gap-4"
+      className="flex flex-col rounded-md bg-[#161C22] w-[300px] max-w-[350px] h-[500px] gap-1"
     >
       {/* Column Title Container */}
       <header
         {...attributes}
         {...listeners}
         onClick={() => setEditMode(true)}
-        className="flex justify-between items-center rounded-lg rounded-b-none bg-[#0D1117] p-3 font-bold text-md h-[60px] cursor-grab border-[#161C22] border-4"
+        className="flex h-[60px] bg-[#0D1117] border-[#161C22] border-4 justify-between items-center rounded-lg rounded-b-none font-bold text-md cursor-grab p-2"
       >
         <div className="flex gap-4">
-          {/* <span className="bg-[#161C22] flex justify-center items-center px-2 py-1 text-sm rounded-md">
-            20
-          </span> */}
-          {/* <PriorityIconSelector /> */}
-          {/* <div className="column-title-and-delete"></div> */}
           {!editMode && (
             <span className="text-md capitalize p-2">{column.title}</span>
           )}
@@ -102,19 +97,10 @@ function ColumnContainer({
             />
           )}
         </div>
-        <button
-          className="cursor-pointer p-2 rounded-full text-gray-500 hover:text-rose-500 hover:bg-[#161C22]"
-          onClick={() => deleteColumn(column.id)}
-        >
-          <TrashIcon />
-        </button>
       </header>
-      <section className="priority-only">
-        <PriorityIconSelector />
-      </section>
-
+      <PriorityIconSelector />
       {/* Column Task Container */}
-      <section className="flex flex-col flex-grow gap-4 p-2 overflow-x-hidden overflow-y-auto">
+      <section className="flex flex-col flex-grow gap-2 p-2 overflow-x-hidden overflow-y-auto">
         {tasks.map((task) => (
           <SortableContext items={tasksIds}>
             <TaskCard
@@ -128,15 +114,24 @@ function ColumnContainer({
       </section>
 
       {/* Column Footer Container */}
-      <button
-        className="flex justify-end gap-2 rounded-md items-center border-2 border-[#161C22]  py-4 hover:bg-[#0D1117] p-4 m-1 hover:text-rose-500 active:bg-black"
-        onClick={() => {
-          createTask(column.id);
-        }}
-      >
-        <PlusDocIcon />
-        Add Task
-      </button>
+      <footer className="flex justify-between items-center">
+        <button
+          className="cursor-pointer flex justify-end gap-2 rounded-md items-center border-2 border-[#161C22] p-4 m-1 hover:text-sky-500 active:bg-black"
+          onClick={() => {
+            createTask(column.id);
+          }}
+        >
+          <PlusDocIcon />
+          Add Task
+        </button>
+        <button
+          className="cursor-pointer flex justify-end gap-2 rounded-md items-center border-2 border-[#161C22] hover:bg-[#0D1117] p-4 m-1 hover:text-rose-500 active:bg-black hover:border-rose-500 hover:font-bold"
+          onClick={() => deleteColumn(column.id)}
+        >
+          Delete All
+          <TrashIcon />
+        </button>
+      </footer>
     </div>
   );
 }

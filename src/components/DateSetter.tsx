@@ -18,7 +18,7 @@ function DateSetter({ selectedDate, onDateChange }: DateSetterProps) {
         selected={selectedDate}
         onChange={onDateChange}
         dateFormat="MMMM d, yyyy"
-        className="border rounded-md outline-none border-none flex place-items-end"
+        className="border rounded-md outline-none border-none flex place-items-end cursor-pointer"
         placeholderText="Pick a date"
       />
     </div>

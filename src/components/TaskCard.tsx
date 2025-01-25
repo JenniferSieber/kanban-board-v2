@@ -1,5 +1,4 @@
 import MinusIcon from "../icons/MinusIcon";
-// import TrashIcon from "../icons/TrashIcon";
 import { Task, Id } from "../types";
 import { useState, useEffect, useRef } from "react";
 import { useSortable } from "@dnd-kit/sortable";
@@ -60,9 +59,7 @@ function TaskCard({ task, deleteTask, updateTask }: Props) {
         ref={setNodeRef}
         style={style}
         className="opacity-40 relative cursor-grab flex text-left items-center bg-[#0D1117] h-[100px] min-h-[100px] p-2.5 rounded-xl border-2 border-rose-500"
-      >
-        {/* placeholder overlay */}
-      </div>
+      ></div>
     );
   }
 

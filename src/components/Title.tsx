@@ -1,6 +1,5 @@
 import { useState } from "react";
 import GroupIcon from "../icons/GroupIcon";
-import CalendarIcon from "../icons/CalendarIcon";
 
 interface Props {
   projectName: string;
@@ -11,13 +10,11 @@ function Title({ projectName, updateProjectTitle }: Props) {
   const [editMode, setEditMode] = useState(false);
 
   return (
-    <div className="title-container flex justify-between">
+    <div className="cursor-pointer title-container flex justify-between">
       <header className="flex items-center text-2xl">
         <GroupIcon />
         <div onClick={() => setEditMode(true)}>
-          {!editMode && (
-            <span className="capitalize p-1">{projectName}</span>
-          )}
+          {!editMode && <span className="capitalize p-1">{projectName}</span>}
 
           {editMode && (
             <input
@@ -35,10 +32,6 @@ function Title({ projectName, updateProjectTitle }: Props) {
           )}
         </div>
       </header>
-      <div className="date-container p-5 flex items-center">
-        {/* <CalendarIcon />
-        date */}
-      </div>
     </div>
   );
 }
