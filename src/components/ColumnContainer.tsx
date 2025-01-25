@@ -60,7 +60,7 @@ function ColumnContainer({
       <div
         ref={setNodeRef}
         style={style}
-        className="flex flex-col rounded-md bg-[#161C22] opacity-50 border-2 border-rose-700 w-[350px] h-[500px] max-h-[500px] gap-4"
+        className="flex flex-col rounded-md bg-[#161C22] w-[300px] max-w-[350px] h-[500px] gap-4 opacity-50 border-2 border-rose-700"
       ></div>
     );
   }
@@ -69,7 +69,7 @@ function ColumnContainer({
     <div
       ref={setNodeRef}
       style={style}
-      className="flex flex-col rounded-md bg-[#161C22] w-[350px] h-[500px] max-h-[500px] gap-4"
+      className="flex flex-col rounded-md bg-[#161C22] w-[300px] max-w-[350px] h-[500px] gap-4"
     >
       {/* Column Title Container */}
       <header

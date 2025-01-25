@@ -26,6 +26,15 @@ body,
   outline: none;
 }
 
+
+.column-container {
+  flex: 1 1 calc(33.333% - 1rem); /* Adjust to fit 3 in a row */
+  /* max-width: 900px; */
+  min-width: 200px; /* Set a minimum width for responsiveness */
+}
+/* .kanban-board {
+  
+} */
 /* ::-webkit-scrollbar-thumb {
   @apply background: bg-rose-900rounded-xl;
 } */

@@ -10,3 +10,7 @@ export type Task = {
     columnId: Id;
     content: string;
 }
+
+// export type ProjectTitle = {
+//     name: string;
+// }
