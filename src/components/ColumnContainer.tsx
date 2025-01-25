@@ -6,6 +6,7 @@ import PlusDocIcon from "../icons/PlusDocIcon";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { SortableContext } from "@dnd-kit/sortable";
+import PriorityIconSelector from "./PriorityIconSelector";
 
 interface ColumnContainerProps {
   column: Column;
@@ -78,10 +79,12 @@ function ColumnContainer({
         onClick={() => setEditMode(true)}
         className="flex justify-between items-center rounded-lg rounded-b-none bg-[#0D1117] p-3 font-bold text-md h-[60px] cursor-grab border-[#161C22] border-4"
       >
-        <div className="flex  gap-4">
-          <span className="bg-[#161C22] flex justify-center items-center px-2 py-1 text-sm rounded-md">
+        <div className="flex gap-4">
+          {/* <span className="bg-[#161C22] flex justify-center items-center px-2 py-1 text-sm rounded-md">
             20
-          </span>
+          </span> */}
+          {/* <PriorityIconSelector /> */}
+          {/* <div className="column-title-and-delete"></div> */}
           {!editMode && (
             <span className="text-md capitalize p-2">{column.title}</span>
           )}
@@ -106,6 +109,9 @@ function ColumnContainer({
           <TrashIcon />
         </button>
       </header>
+      <section className="priority-only">
+        <PriorityIconSelector />
+      </section>
 
       {/* Column Task Container */}
       <section className="flex flex-col flex-grow gap-4 p-2 overflow-x-hidden overflow-y-auto">

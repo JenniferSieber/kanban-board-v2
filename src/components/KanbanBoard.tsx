@@ -38,7 +38,7 @@ function KanbanBoard() {
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
-        distance: 3, // starts at 3px
+        distance: 10, // starts at 10px
       },
     })
   );
