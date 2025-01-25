@@ -4,15 +4,17 @@ import CalendarIcon from "../icons/CalendarIcon";
 
 interface DateSetterProps {
   selectedDate: Date | null;
+  heading: string;
+  handleDateChange: (date: Date | null) => void;
   onDateChange: (date: Date | null) => void;
 }
 
-function DateSetter({ selectedDate, onDateChange }: DateSetterProps) {
+function DateSetter({ heading, selectedDate, onDateChange }: DateSetterProps) {
   return (
     <div className="date-setter flex flex-col items-end">
       <label className="flex font-semibold text-rose-900 items-center gap-1"> 
         <CalendarIcon />
-        <span>Deadline:</span>
+        <span>{heading}</span>
       </label>
       <DatePicker
         selected={selectedDate}
@@ -26,3 +28,5 @@ function DateSetter({ selectedDate, onDateChange }: DateSetterProps) {
 }
 
 export default DateSetter;
+
+

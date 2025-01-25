@@ -11,6 +11,10 @@ export type Task = {
     content: string;
 }
 
+export type Member = {
+    id: Id;
+    memberName: string;
+}
 // export type ProjectTitle = {
 //     name: string;
 // }

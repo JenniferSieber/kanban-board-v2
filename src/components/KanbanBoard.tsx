@@ -1,9 +1,9 @@
-import { Column, Id, Task } from "../types";
+import { Column, Id, Task, Owner } from "../types";
 import { useState, useMemo } from "react";
 import PlusIcon from "../icons/PlusIcon";
 import ColumnContainer from "./ColumnContainer";
-import Title from "./Title";
 import TaskCard from "./TaskCard";
+import TitleComponent from "./TitleComponent";
 import {
   DndContext,
   DragOverlay,
@@ -16,16 +16,33 @@ import {
 } from "@dnd-kit/core";
 import { SortableContext, arrayMove } from "@dnd-kit/sortable";
 import { createPortal } from "react-dom";
-import DateSetter from "./DateSetter";
+import DatesComponent from "./DatesComponent";
+import GenerateProjectOwners from "./GenerateProjectOwners";
 
 function KanbanBoard() {
   const [projectName, setProjectName] = useState<string>("Project Name");
+  const [projectOwners, setProjectOwners] = useState<Owner[]>([]);
   const [columns, setColumns] = useState<Column[]>([]);
   const [activeColumn, setActiveColumn] = useState<Column | null>(null);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
 
+  // Project Owners Logic
+  const [projectOwners, setProjectOwners] = useState<Member[]>(owners || []);
+  const [newMemberName, setNewMemberName] = useState<string>("");
+
+  function updateProjectOwners(memberName: string) {
+    const id = generateRandomId();
+    const newMember = { id, memberName };
+    setProjectOwners([...projectOwners, newMember]);
+  }
+
+  // function generateProjectOwners({projectOwners} ) {
+  //   return (
+
+  //   )
+  // }
   const handleDateChange = (date: Date | null) => {
     setSelectedDate(date);
     console.log("Selected Date in Main Component:", date);
@@ -164,24 +181,43 @@ function KanbanBoard() {
 
   return (
     <main className="kanban-board m-10 m-w-[800px]">
-      <div className="rounded-md h-[170px] bg-[#161C22] flex flex-col gap-5 p-2">
+      <div className="rounded-md h-[100px] bg-[#161C22] flex flex-col gap-5 p-2 rounded-b-none">
         <div className="title-date flex justify-between p-2">
-          <Title
+          <TitleComponent
             projectName={projectName}
             updateProjectTitle={updateProjectTitle}
           />
-          <DateSetter
-            selectedDate={selectedDate}
-            onDateChange={handleDateChange}
-          />
+          <div className="date-box flex flex-col">
+            <DatesComponent
+              heading="Deadline"
+              selectedDate={selectedDate}
+              onDateChange={handleDateChange}
+              handleDateChange={handleDateChange}
+            />
+          </div>
         </div>
+      </div>
+      <div className="add-task-container h-[80px] bg-[#161C22] p-2">
         <button
-          className="flex justify-center gap-3 h-[60px] w-[350px] m-w-[350px] p-4 border-2 rounded-lg cursor-pointer bg-[#0D1117]  border-[#161C22] hover:text-rose-500 hover:bg-black"
+          className="flex justify-center gap-3 h-[60px] w-[250px] m-w-[350px] p-4 border-2 rounded-lg cursor-pointer bg-[#0D1117]  border-[#161C22] hover:text-rose-500 hover:border-rose-500 hover:bg-black"
           onClick={() => createNewColumn()}
         >
           <PlusIcon /> Add Task Column
         </button>
+        <div className="project-details"></div>
       </div>
+      <div className="group-members-icon h-[80px] bg-[#161C22] p-2">
+        <GenerateProjectOwners  
+          updateProjectOwners={updateProjectOwners}
+        />
+        <div className="project-details"></div>
+      </div>
+      {/* <button
+          className="flex justify-center gap-3 h-[60px] w-[350px] m-w-[350px] p-4 border-2 rounded-lg cursor-pointer bg-[#0D1117]  border-[#161C22] hover:text-rose-500 hover:bg-black"
+          onClick={() => createNewColumn()}
+        >
+          <PlusIcon /> Add Task Column
+        </button> */}
 
       <div className="m-auto m-h-screen overflow-x-auto overflow-y-hidden flex items-center justify-center w-full">
         <DndContext

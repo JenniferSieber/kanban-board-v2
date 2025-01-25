@@ -6,7 +6,7 @@ interface Props {
   updateProjectTitle: (name: string) => void;
 }
 
-function Title({ projectName, updateProjectTitle }: Props) {
+function TitleComponent({ projectName, updateProjectTitle }: Props) {
   const [editMode, setEditMode] = useState(false);
 
   return (
@@ -36,4 +36,4 @@ function Title({ projectName, updateProjectTitle }: Props) {
   );
 }
 
-export default Title;
+export default TitleComponent;
