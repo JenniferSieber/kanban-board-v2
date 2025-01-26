@@ -1,9 +1,11 @@
-import { Column, Id, Task, Owner } from "../types";
+import { Column, Id, Task, Member } from "../types";
 import { useState, useMemo } from "react";
 import PlusIcon from "../icons/PlusIcon";
 import ColumnContainer from "./ColumnContainer";
 import TaskCard from "./TaskCard";
 import TitleComponent from "./TitleComponent";
+import DatesComponent from "./DatesComponent";
+import GenerateProjectOwners from "./GenerateProjectOwners";
 import {
   DndContext,
   DragOverlay,
@@ -16,40 +18,38 @@ import {
 } from "@dnd-kit/core";
 import { SortableContext, arrayMove } from "@dnd-kit/sortable";
 import { createPortal } from "react-dom";
-import DatesComponent from "./DatesComponent";
-import GenerateProjectOwners from "./GenerateProjectOwners";
 
 function KanbanBoard() {
+  const generateId = () => Math.floor(Math.random() * 10001);
   const [projectName, setProjectName] = useState<string>("Project Name");
-  const [projectOwners, setProjectOwners] = useState<Owner[]>([]);
   const [columns, setColumns] = useState<Column[]>([]);
   const [activeColumn, setActiveColumn] = useState<Column | null>(null);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
-
-  // Project Owners Logic
-  const [projectOwners, setProjectOwners] = useState<Member[]>(owners || []);
+  const [projectOwners, setProjectOwners] = useState<Member[]>([]);
   const [newMemberName, setNewMemberName] = useState<string>("");
 
-  function updateProjectOwners(memberName: string) {
-    const id = generateRandomId();
-    const newMember = { id, memberName };
-    setProjectOwners([...projectOwners, newMember]);
+  // Project Owners Input Logic
+  function updateProjectOwners(newMemberName: string) {
+    const randomId = generateId();
+    const newProjectMember = { id: randomId, memberName: newMemberName };
+
+    if (newProjectMember.memberName !== "")
+      setNewMemberName(newProjectMember.memberName);
+    setProjectOwners([...projectOwners, newProjectMember]);
   }
 
-  // function generateProjectOwners({projectOwners} ) {
-  //   return (
+  // Project Owners remove Member
+  function reduceProjectOwners(id: Id) {
+    const updatedProjectMembers = projectOwners.filter(user => user.id !== id)
+    setProjectOwners(updatedProjectMembers);
+  }
 
-  //   )
-  // }
   const handleDateChange = (date: Date | null) => {
     setSelectedDate(date);
     console.log("Selected Date in Main Component:", date);
   };
-
-  const generateId = () => Math.floor(Math.random() * 10001);
-  const columnsId = useMemo(() => columns.map((col) => col.id), [columns]);
 
   // Dragging logic: sensors to identify different actions
   const sensors = useSensors(
@@ -59,14 +59,19 @@ function KanbanBoard() {
       },
     })
   );
-
+  
   // Project Title
   function updateProjectTitle(name: string) {
-    if (name !== projectName) {
-      setProjectName(name);
+    if (/^[a-zA-Z '-]+$/.test(name.trim()) && name.trim() !== "") {
+      setProjectName(name.trim());
+      console.log(name.trim())
+    } else {
+      alert(`${name} is invalid. Please try again.`);
     }
   }
+  
   // Column Functionality
+  const columnsId = useMemo(() => columns.map((col) => col.id), [columns]);
   function createNewColumn() {
     const randomId = generateId();
     const columnToAdd: Column = {
@@ -159,8 +164,7 @@ function KanbanBoard() {
     const newTask: Task = {
       id: randomId,
       columnId,
-      // content: `Task ${tasks.length + 1}`
-      content: `Task Id: ${randomId}`,
+      content: "Task Title",
     };
     setTasks([...tasks, newTask]);
   }
@@ -180,99 +184,97 @@ function KanbanBoard() {
   }
 
   return (
-    <main className="kanban-board m-10 m-w-[800px]">
-      <div className="rounded-md h-[100px] bg-[#161C22] flex flex-col gap-5 p-2 rounded-b-none">
-        <div className="title-date flex justify-between p-2">
-          <TitleComponent
-            projectName={projectName}
-            updateProjectTitle={updateProjectTitle}
-          />
-          <div className="date-box flex flex-col">
-            <DatesComponent
-              heading="Deadline"
-              selectedDate={selectedDate}
-              onDateChange={handleDateChange}
-              handleDateChange={handleDateChange}
-            />
-          </div>
-        </div>
-      </div>
-      <div className="add-task-container h-[80px] bg-[#161C22] p-2">
-        <button
-          className="flex justify-center gap-3 h-[60px] w-[250px] m-w-[350px] p-4 border-2 rounded-lg cursor-pointer bg-[#0D1117]  border-[#161C22] hover:text-rose-500 hover:border-rose-500 hover:bg-black"
-          onClick={() => createNewColumn()}
-        >
-          <PlusIcon /> Add Task Column
-        </button>
-        <div className="project-details"></div>
-      </div>
-      <div className="group-members-icon h-[80px] bg-[#161C22] p-2">
-        <GenerateProjectOwners  
-          updateProjectOwners={updateProjectOwners}
+    <div className="flex flex-col h-screen w-screen">
+      {/* Header */}
+      <header className="h-[100px] bg-[#161C22] p-4 text-white flex justify-between items-center ">
+      
+        <TitleComponent
+          updateProjectTitle={() => updateProjectTitle(projectName)}
         />
-        <div className="project-details"></div>
-      </div>
-      {/* <button
-          className="flex justify-center gap-3 h-[60px] w-[350px] m-w-[350px] p-4 border-2 rounded-lg cursor-pointer bg-[#0D1117]  border-[#161C22] hover:text-rose-500 hover:bg-black"
-          onClick={() => createNewColumn()}
-        >
-          <PlusIcon /> Add Task Column
-        </button> */}
-
-      <div className="m-auto m-h-screen overflow-x-auto overflow-y-hidden flex items-center justify-center w-full">
-        <DndContext
-          sensors={sensors}
-          onDragStart={onDragStart}
-          onDragEnd={onDragEnd}
-          onDragOver={onDragOver}
-        >
-          <div className="py-5">
-            <div className="flex flex-wrap justify-center gap-4">
-              <SortableContext items={columnsId}>
-                {columns.map((col) => (
-                  <ColumnContainer
-                    key={col.id}
-                    column={col}
-                    deleteColumn={deleteColumn}
-                    updateColumn={updateColumn}
-                    createTask={createTask}
-                    deleteTask={deleteTask}
-                    updateTask={updateTask}
-                    tasks={tasks.filter((task) => task.columnId === col.id)}
-                  />
-                ))}
-              </SortableContext>
-            </div>
-          </div>
-          {createPortal(
-            <DragOverlay>
-              {activeColumn && (
-                <ColumnContainer
-                  column={activeColumn}
-                  deleteColumn={deleteColumn}
-                  updateColumn={updateColumn}
-                  createTask={createTask}
-                  deleteTask={deleteTask}
-                  updateTask={updateTask}
-                  tasks={tasks.filter(
-                    (task) => task.columnId === activeColumn.id
+        <div className="date-box flex flex-col">
+          <DatesComponent
+            heading="Deadline"
+            selectedDate={selectedDate}
+            onDateChange={handleDateChange}
+            handleDateChange={handleDateChange}
+          />
+        </div>
+      </header>
+      {/* Main Content */}
+      <div className="flex flex-grow">
+        {/* Aside - (Left Sidebar) */}
+        <aside className="w-1/3 min-w-[200px] max-w-[300px] bg-[#0D1117] p-4 text-white">
+          <GenerateProjectOwners
+            newMemberName={newMemberName}
+            setNewMemberName={setNewMemberName}
+            projectOwners={projectOwners}
+            updateProjectOwners={updateProjectOwners}
+            reduceProjectOwners={reduceProjectOwners}
+          />
+        </aside>
+        {/* Tasks Container (Right Section) */}
+        <main className="w-2/3 bg-[#1A202C] p-4 text-white overflow-y-auto">
+          <button
+            className="flex justify-center gap-3 h-[60px] w-[250px] m-w-[350px] p-4 border-2 rounded-lg cursor-pointer bg-[#0D1117]  border-[#161C22] hover:text-rose-500 hover:border-rose-500 hover:bg-black"
+            onClick={() => createNewColumn()}
+          >
+            <PlusIcon /> Add Task Column
+          </button>
+          <div className="project-details">Soon to be Project Details</div>
+          <DndContext
+            sensors={sensors}
+            onDragStart={onDragStart}
+            onDragEnd={onDragEnd}
+            onDragOver={onDragOver}
+          >
+            <div className="mt-4 flex space-x-4">
+              <div className="flex flex-wrap justify-center gap-4">
+                <SortableContext items={columnsId}>
+                  {columns.map((col) => (
+                    <ColumnContainer
+                      key={col.id}
+                      column={col}
+                      deleteColumn={deleteColumn}
+                      updateColumn={updateColumn}
+                      createTask={createTask}
+                      deleteTask={deleteTask}
+                      updateTask={updateTask}
+                      tasks={tasks.filter((task) => task.columnId === col.id)}
+                    />
+                  ))}
+                </SortableContext>
+              </div>
+              {createPortal(
+                <DragOverlay>
+                  {activeColumn && (
+                    <ColumnContainer
+                      column={activeColumn}
+                      deleteColumn={deleteColumn}
+                      updateColumn={updateColumn}
+                      createTask={createTask}
+                      deleteTask={deleteTask}
+                      updateTask={updateTask}
+                      tasks={tasks.filter(
+                        (task) => task.columnId === activeColumn.id
+                      )}
+                    />
                   )}
-                />
+                  {activeTask && (
+                    <TaskCard
+                      key={activeTask.id}
+                      task={activeTask}
+                      deleteTask={deleteTask}
+                      updateTask={updateTask}
+                    />
+                  )}
+                </DragOverlay>,
+                document.body
               )}
-              {activeTask && (
-                <TaskCard
-                  key={activeTask.id}
-                  task={activeTask}
-                  deleteTask={deleteTask}
-                  updateTask={updateTask}
-                />
-              )}
-            </DragOverlay>,
-            document.body
-          )}
-        </DndContext>
+            </div>
+          </DndContext>
+        </main>
       </div>
-    </main>
+    </div>
   );
 }
 

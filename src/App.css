@@ -6,6 +6,34 @@ body,
   color: white;
 }
 
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Full height of the viewport */
+}
+
+.users-column {
+  flex: 0 0 30%; /* Fixed at 30% width */
+  background-color: #f0f0f0; /* Light gray background */
+  padding: 20px;
+  border-right: 1px solid #ccc;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.main-content {
+  flex: 1; /* Takes up the remaining 70% */
+  padding: 20px;
+}
+
+.tasks-container {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
 ::-webkit-scrollbar {
   width: 4px;
 }

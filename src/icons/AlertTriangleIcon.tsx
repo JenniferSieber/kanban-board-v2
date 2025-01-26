@@ -1,4 +1,4 @@
-function UserCircleIcon() {
+function AlertTriangleIcon() {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -11,10 +11,10 @@ function UserCircleIcon() {
       <path
         strokeLinecap="round"
         strokeLinejoin="round"
-        d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+        d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z"
       />
     </svg>
   );
 }
 
-export default UserCircleIcon;
+export default AlertTriangleIcon;
